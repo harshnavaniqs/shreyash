@@ -1,25 +1,57 @@
-import logo from './logo.svg';
+import React from 'react';
+// import Card from './Card';
+import ButtonGroup from './ButtonGroup';
 import './App.css';
+import KanbanBoard from './Kanban';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      tickets: [],
+      DataisLoaded: false,
+      groupOption: 'status',
+      orderOption: 'priority',
+    };
+  }
+
+  componentDidMount() {
+    fetch('https://apimocha.com/quicksell/data')
+      .then((res) => res.json())
+      .then((json) => {
+        this.setState({
+          tickets: json.tickets,
+          DataisLoaded: true,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+  render() {
+    const { DataisLoaded, tickets, groupOption, orderOption } = this.state;
+
+    if (!DataisLoaded) return <div>Loading...</div>;
+
+    return (
+      <div className="App">
+        <h1>Kanban Cards</h1>
+        <ButtonGroup
+          groupOption={groupOption}
+          setGroupOption={(option) => this.setState({ groupOption: option })}
+          orderOption={orderOption}
+          setOrderOption={(option) => this.setState({ orderOption: option })}
+        />
+        <KanbanBoard
+          tickets={tickets}
+          groupOption={groupOption}
+          orderOption={orderOption}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
