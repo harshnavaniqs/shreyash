@@ -44,7 +44,7 @@ function KanbanBoard({ tickets, groupOption, orderOption }) {
     <div className="KanbanBoard">
       {Object.keys(orderedGroupedTickets).map((group) => (
         <div key={group} className="group">
-          <h2>{getGroupName(group)}</h2>
+          <h2>{getColumn(group)}</h2>
           <div className="card-group">
             {orderedGroupedTickets[group].map((ticket) => (
               <Card
@@ -64,7 +64,7 @@ function KanbanBoard({ tickets, groupOption, orderOption }) {
   );
 }
 
-function getGroupName(group) {
+function getColumn(group) {
   switch (group) {
     case '0':
       return 'No Priority';
